@@ -17,7 +17,7 @@ const register = (data) => {
   if (valid.name(data.lastname)) { return { err: 'Wrong format lastname' }; }
   if (data.password !== data.repassword) { return { err: 'Can\'t be Password != Repeat-Password' }; }
   if (data.login === data.password) { return { err: 'Login and password cannot be the same' }; }
-  return true;
+  return false;
 };
 
 const login = () => {

@@ -8,6 +8,7 @@ export const Connect = (req, res, next) => {
     if (err) next(err);
     logger('Mongo:Connect');
     req.db = db;
+    req.dUsers = db.collection('dUsers');
     return next();
   });
 };

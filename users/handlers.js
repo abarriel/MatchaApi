@@ -3,14 +3,19 @@ import * as parse from './parsers';
 
 const logger = debug('matcha:users/handlers.js:');
 
-const register = (req, res) => {
-  const responseParser = parse.register(req.body);
-
-  res.send(responseParser);
+export const register = (req, res, next) => {
+  const errorParser = parse.register(req.body);
+  if (errorParser) throw errorParser;
+  delete req.body.repassword;
+  const foundUsers = req.dUsers.findOne(
+    {
+      $or: [{ login: req.body.login }, { email: req.body.email }],
+    });
+  logger(foundUsers);
+  res.send();
+  return next();
 };
 
-const login = () => {
+export const login = () => {
   logger('Login Objects');
 };
-
-export { register, login };

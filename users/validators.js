@@ -10,7 +10,7 @@ function isEmpty(string) {
 function isSpecialChar(string) {
   return (/\W+/.test(string));
 }
-
+// match all post which the expected one
 const postCheckEmptyAndKey = (fixedElm, body) => {
   const error = [];
   _.forEach(body, (val, key) => {
@@ -44,10 +44,11 @@ const password = (passwd) => {
   return (logger('good password'));
 };
 
-const login = (login) => {
-  if (isSpecialChar(login)) return (logger('Login has a special Chars'));
-  if (!/^.{5,25}$/.test(login)) return (logger('Login Not good Lenght '));
-}
+const login = (username) => {
+  if (isSpecialChar(username) || !/^.{5,25}$/.test(username)) return (false);
+  return (true);
+};
+
 export {
   mail,
   name,

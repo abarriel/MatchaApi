@@ -4,7 +4,8 @@ import * as parse from './parsers';
 const logger = debug('matcha:users/handlers.js:');
 
 const register = (req, res) => {
-  parse.register(req.body);
+  const rep = parse.register(req.body);
+  logger(rep);
   res.send();
 };
 

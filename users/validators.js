@@ -30,23 +30,23 @@ const postCheckEmptyAndKey = (fixedElm, body) => {
 
 const mail = (email) => {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  if (!re.test(email)) return (false);
-  return (true);
+  if (!re.test(email)) return (true);
+  return (false);
 };
 
 const name = (nom) => {
-  if (!/^[A-Za-z ]{2,30}$/.test(nom)) return (false);
-  return (true);
+  if (!/^[A-Za-z ]{2,30}$/.test(nom)) return (true);
+  return (false);
 };
 
 const password = (passwd) => {
-  if (!/^(?=.*[a-zA-Z])(?=.*\W)(?=.*[0-9]).{6,}$/.test(passwd)) return (false);
-  return (true);
+  if (!/^(?=.*[a-zA-Z])(?=.*\W)(?=.*[0-9]).{6,}$/.test(passwd)) return (true);
+  return (false);
 };
 
 const login = (username) => {
-  if (isSpecialChar(username) || !/^.{5,25}$/.test(username)) return (false);
-  return (true);
+  if (isSpecialChar(username) || !/^.{5,25}$/.test(username)) return (true);
+  return (false);
 };
 
 export {

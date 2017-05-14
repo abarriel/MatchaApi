@@ -14,8 +14,8 @@ app
   .use(cors())
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
-  .use('/api', mongo.Connect);
-
+  .use('/api', mongo.Connect)
+  .use('/api', mongo.Error);
 app
   .post('/api/users/register', handlers.register);
 

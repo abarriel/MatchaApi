@@ -1,5 +1,4 @@
 import debug from 'debug';
-import { mongoConnect } from 'mongodb';
 import * as parse from './parsers';
 
 const logger = debug('matcha:users/handlers.js:');

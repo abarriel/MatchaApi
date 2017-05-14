@@ -14,18 +14,17 @@ function isSpecialChar(string) {
 const postCheckEmptyAndKey = (fixedElm, body) => {
   const error = [];
   _.forEach(body, (val, key) => {
-    if (typeof val === 'object')
-      console.log(val);
+    if (typeof val === 'object') { return error.push('more than one values'); }
+    if (typeof val === 'object') { return error.push('not good '); }
     if (fixedElm.indexOf(key) === -1) { return error.push('not good action'); }
     return (true);
   });
-  _.forEach(fixedElm, (val, key) => {
+  _.forEach(fixedElm, (val) => {
     if (body[val] === undefined || isEmpty(body[val])) { return error.push('empty values'); }
     return (true);
-  })
+  });
   logger(`Error = ${error}`);
-  // logger(`Body = ${body}`);
-  logger(`Values = ${fixedElm}\n`);
+  // logger(`Values = ${fixedElm}\n`);
 };
 
 const mail = (email) => {
@@ -36,11 +35,22 @@ const mail = (email) => {
 
 const name = (nom) => {
   logger(nom);
-  if (isSpecialChar(nom)) return (logger('Name has a special Chars'));
+  if (!/^[A-Za-z ]{2,30}$/.test(nom)) return (logger('Name has a special Chars'));
   return (logger('good name'));
 };
 
-const password = (password) => {
-  // if(isEmpty(nom) return)
+const password = (passwd) => {
+  if (!/^(?=.*[a-zA-Z])(?=.*\W)(?=.*[0-9]).{6,}$/.test(passwd)) return (logger('Not Good Password'));
+  return (logger('good password'));
+};
+
+const login = (login) => {
+  if (isSpecialChar(login)) return (logger('Login has a special Chars'));
+  if (!/^.{5,25}$/.test(login)) return (logger('Login Not good Lenght '));
 }
-export { mail, name, postCheckEmptyAndKey };
+export {
+  mail,
+  name,
+  login,
+  password,
+  postCheckEmptyAndKey };

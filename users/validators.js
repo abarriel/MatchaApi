@@ -23,7 +23,7 @@ const postCheckEmptyAndKey = (fixedElm, body) => {
     if (body[val] === undefined || isEmpty(body[val])) { return error.push('Empty values'); }
     return (true);
   });
-  // logger(`Error = ${error}`);
+  logger(`Error = ${error}`);
   if (Object.keys(error).length === 0) return (false);
   return (true);
 };

@@ -1,9 +1,9 @@
 import debug from 'debug';
-import * as parse from './parsers';
-import { prepareQueryRegister } from './register';
+import * as parse from './dispatchParsers';
+import { prepareQueryRegister } from './prepareQueries';
 
-const logger = debug('matcha:users/handlers.js:');
-// Users already Register using the same Email and Login
+const logger = debug('matcha:users/dispatchingQueries.js:');
+
 export const register = (req, res, next) => {
   const errorParser = parse.register(req.body);
   if (errorParser) throw errorParser;
@@ -11,7 +11,7 @@ export const register = (req, res, next) => {
   req.dUsers
   .findOne({ $or: [{ login: 'req.body.login' }, { email: 'req.body.email' }] })
   .then((err) => { if (err) throw err; })
-  .catch(() => { logger('users already Register using the same Email and Login'); })
+  .catch(() => { logger('user already register using the same Email/Login'); })
   .then(prepareQueryRegister(req.body));
   res.send();
   return next();

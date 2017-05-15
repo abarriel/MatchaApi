@@ -1,5 +1,5 @@
 // import debug from 'debug';
-import * as valid from './validators';
+import * as valid from './inputValidators';
 
 // const logger = debug('matcha:./users/parsers.js');
 

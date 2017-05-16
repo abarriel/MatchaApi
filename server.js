@@ -14,13 +14,13 @@ app
   .use(cors())
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
-  .use(root, mongo.Connect)
+  .use('/api', mongo.Connect)
   .use('/api', mongo.Error);
 
 app
   .use('/api/users', auth);
 
-app
-  .use('/api', mongo.Disconnect);
+// app
+//   .use('/api', mongo.Disconnect);
 
 server.listen(8080, () => logger('SERVER STARTED'));

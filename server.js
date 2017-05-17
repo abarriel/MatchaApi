@@ -5,6 +5,7 @@ import debug from 'debug';
 import cors from 'cors';
 import auth from './routes/auth';
 import users from './routes/users';
+import { checkAuthenticate } from './modules/tokens';
 import * as mongo from './config/mongo';
 
 const logger = debug('matcha:server.js:');
@@ -16,7 +17,8 @@ app
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
   .use('/api', mongo.Connect)
-  .use('/api', mongo.Error);
+  .use('/api', mongo.Error)
+  .use('/api', checkAuthenticate);
 
 app
   .use('/api/auth', auth);
@@ -24,8 +26,7 @@ app
 app
   .use('/api/users', users);
 
-
 // app
-//   .use('/api', mongo.Disconnect);
+  // .use('/api', mongo.Disconnect);
 
 server.listen(8080, () => logger('SERVER STARTED'));

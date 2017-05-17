@@ -53,3 +53,21 @@ export const confirmUserMail = (req, res, next) => {
   .catch((err) => { logger(err); });
   return next();
 };
+
+export const resetPassword = (req, res, next) => {
+  const errorParser = parse.resetPassword(req.body);
+  if (errorParser) {
+    logger(errorParser);
+    return next();
+  }
+  req.dUsers
+  .findOne({ email: req.body.email })
+  .then((data) => { if (!data) throw Err('No Account Found - ResetPassword!'); })
+  .then(() => {
+    // req.dUsers
+    //   .update({ email: req.body.email },
+    //   { $set: { password:  }})
+  })
+  .catch((err) => { logger(err); });
+  return next();
+};

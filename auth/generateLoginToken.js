@@ -1,5 +1,5 @@
 import debug from 'debug';
-import { signToken } from '../modules/tokens';
+import { signToken } from '../modules/authToken';
 
 const logger = debug('matcha:auth/dispatchingQueriesAuth.js:');
 

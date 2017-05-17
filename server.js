@@ -5,7 +5,7 @@ import debug from 'debug';
 import cors from 'cors';
 import auth from './routes/auth';
 import users from './routes/users';
-import { checkAuthenticate } from './modules/tokens';
+import { checkAuthenticate } from './modules/authToken';
 import * as mongo from './config/mongo';
 
 const logger = debug('matcha:server.js:');

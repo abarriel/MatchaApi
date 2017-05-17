@@ -13,7 +13,6 @@ export const signToken = (info) => {
 };
 
 export const checkAuthenticate = (req, res, next) => {
-  logger(req.originalUrl);
   if (req.originalUrl.substr(0, 9) === '/api/auth') { next(); return; }
   // const token = req.body.token || req.query.token || req.headers['x-access-token'];
   const tokenBearer = req.headers.authorization;
@@ -31,7 +30,6 @@ export const checkAuthenticate = (req, res, next) => {
   jwt.verify(token, secretSentence, (err, decoded) => {
     if (err) {
       res.send('Token Error');
-      // logger(err);
       logger('Failed to authenticate token');
       return;
     }

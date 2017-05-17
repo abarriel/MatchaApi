@@ -1,7 +1,4 @@
-// import debug from 'debug';
 import * as valid from './inputValidators';
-
-// const logger = debug('matcha:./users/dispatchParsersAuth.js');
 
 export const register = (data) => {
   if (valid.postCheckEmptyAndKey(['login',
@@ -35,5 +32,12 @@ export const confirmUserMail = (data) => {
   ], data)) { return { err: 'Unauthorized post action - confirmUserMail' }; }
   if (valid.login(data.login)) { return { err: 'Wrong format login' }; }
   if (valid.token(data.token)) { return { err: 'Wrong format token' }; }
+  return false;
+};
+
+export const resetPassword = (data) => {
+  if (valid.postCheckEmptyAndKey(['email'],
+  data)) { return { err: 'Unauthorized post action - ResetPassword' }; }
+  if (valid.mail(data.email)) { return { err: 'Wrong format email' }; }
   return false;
 };

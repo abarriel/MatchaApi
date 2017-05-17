@@ -5,7 +5,8 @@ const router = Router();
 
 router
   .post('/register', handlers.register)
-  .post('/auth', handlers.login)
-  .post('/auth/confirm', handlers.confirmUserMail);
+  .post('/login', handlers.login)
+  .put('/resetpassword', handlers.resetPassword)
+  .post('/confirmuser', handlers.confirmUserMail);
 
 export default router;

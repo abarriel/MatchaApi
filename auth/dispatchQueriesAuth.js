@@ -1,6 +1,9 @@
 import debug from 'debug';
+import jwt from 'jsonwebtoken';
 import { Err } from '../modules/error';
 import { generateLoginToken } from './generateLoginToken';
+import { resetToken, secretSentence } from '../modules/authToken';
+import { sendMail } from '../modules/mail';
 import * as parse from './dispatchParsersAuth';
 import * as prepare from './prepareQueries';
 
@@ -64,10 +67,36 @@ export const resetPassword = (req, res, next) => {
   .findOne({ email: req.body.email })
   .then((data) => { if (!data) throw Err('No Account Found - ResetPassword!'); })
   .then(() => {
-    // req.dUsers
-    //   .update({ email: req.body.email },
-    //   { $set: { password:  }})
+    const token = resetToken(req.body.email);
+    sendMail(req.body.email, 'Reset Password - Matcha', `Please Reset Your password following this link
+    http://localhost:8080/api/auth/resetpassword?token=${token}`);
   })
   .catch((err) => { logger(err); });
+  return next();
+};
+
+// update check response demain si pas trouver il renvoi quoi ce fdp
+export const resetPasswordForm = (req, res, next) => {
+  const errorParser = parse.resetPasswordForm(req.query);
+  if (errorParser) {
+    logger(errorParser);
+    return next();
+  }
+  jwt.verify(req.query.token, secretSentence, (err, decoded) => {
+    if (err) {
+      logger('Failed to authenticate token');
+      return;
+    }
+    logger('Authorized');
+    req.decoded = decoded;
+    req.dUsers
+    .findOne({ email: req.decoded.email })
+    .then((data) => { if (!data) throw Err('No Account Found - ResetPassword!'); })
+    .then(() => {
+      // req.dUsers
+        // .update({ email: req.decoded.email }, { $set: })
+    })
+    .catch((err) => { logger(err); });
+  });
   return next();
 };

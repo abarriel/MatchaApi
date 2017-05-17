@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import debug from 'debug';
 
-const secretSentence = 'MatcharS32z3LkMatchaAbarriel';
+export const secretSentence = 'MatcharS32z3LkMatchaAbarriel';
 const logger = debug('matcha:./modules/tokens.js');
 
 export const signToken = (info) => {
@@ -9,6 +9,13 @@ export const signToken = (info) => {
     exp: Math.floor(Date.now() / 1000) + (60 * 60 * 3), // times x days eg : 3
     data: info,
   }, secretSentence);
+  return token;
+};
+
+export const resetToken = (info) => {
+  const token = jwt.sign({
+    data: info,
+  }, secretSentence, { expiresIn: '2m' });
   return token;
 };
 

@@ -20,7 +20,7 @@ export const register = (data) => {
 export const login = (data) => {
   if (valid.postCheckEmptyAndKey(['login',
     'password',
-  ], data)) { return { err: 'Unauthorized post action - login' }; }
+  ], data)) { return { err: 'Unauthorized  action - login' }; }
   if (valid.password(data.password)) { return { err: 'Wrong format password' }; }
   if (valid.login(data.login)) { return { err: 'Wrong format login' }; }
   return false;
@@ -39,5 +39,11 @@ export const resetPassword = (data) => {
   if (valid.postCheckEmptyAndKey(['email'],
   data)) { return { err: 'Unauthorized post action - ResetPassword' }; }
   if (valid.mail(data.email)) { return { err: 'Wrong format email' }; }
+  return false;
+};
+
+export const resetPasswordForm = (data) => {
+  if (valid.postCheckEmptyAndKey(['token'],
+  data)) { return { err: 'Unauthorized post action - ResetPassword' }; }
   return false;
 };

@@ -1,10 +1,10 @@
 import debug from 'debug';
 import { Err } from '../modules/error';
+import { generateLoginToken } from './generateLoginToken';
 import * as parse from './dispatchParsersAuth';
 import * as prepare from './prepareQueries';
 
-
-const logger = debug('matcha:users/dispatchingQueriesAuth.js:');
+const logger = debug('matcha:auth/dispatchingQueriesAuth.js:');
 
 export const register = (req, res, next) => {
   const errorParser = parse.register(req.body);
@@ -29,8 +29,12 @@ export const login = (req, res, next) => {
   }
   req.dUsers
   .findOne({ login: req.body.login })
-  .then((data) => { if (!data) throw Err('No Account Found - login!'); return data; })
-  .then((data) => { if (!data.confirmed) throw Err('No Account Found - login'); })
+  .then((data) => {
+    if (!data) throw Err('No Account Found - login!');
+    if (!data.confirmed) throw Err('Account not confirmed - login');
+    return data;
+  })
+  .then((data) => { generateLoginToken(data); })
   .catch((err) => { logger(err); return next(); });
   return next();
 };

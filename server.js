@@ -4,6 +4,7 @@ import express from 'express';
 import debug from 'debug';
 import cors from 'cors';
 import auth from './routes/auth';
+import users from './routes/users';
 import * as mongo from './config/mongo';
 
 const logger = debug('matcha:server.js:');
@@ -18,7 +19,11 @@ app
   .use('/api', mongo.Error);
 
 app
-  .use('/api/users', auth);
+  .use('/api/auth', auth);
+
+app
+  .use('/api/users', users);
+
 
 // app
 //   .use('/api', mongo.Disconnect);

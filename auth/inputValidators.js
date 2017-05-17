@@ -1,7 +1,7 @@
 import debug from 'debug';
 import _ from 'lodash';
 
-const logger = debug('matcha:./users/inputValidators.js');
+const logger = debug('matcha:./auth/inputValidators.js');
 
 function isEmpty(string) {
   return (!string || /^\s*$/.test(string));

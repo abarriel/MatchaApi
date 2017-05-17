@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as handlers from '../users/dispatchQueriesAuth';
+import * as handlers from '../auth/dispatchQueriesAuth';
 
 const router = Router();
 

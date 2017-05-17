@@ -8,7 +8,7 @@ export const prepareQueryRegister = (req) => {
   .then(((pass) => {
     req.body.password = pass;
     req.dUsers
-    .insert(req.body)
+    .insert(Object.assign(req.body, {pasword: 'd'}))
     .catch(() => { logger('insert failed'); });
   })).catch(() => { logger('password error'); });
 };

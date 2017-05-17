@@ -5,7 +5,7 @@ const transport = nodemailer.createTransport({
   auth: {
     user: 'apimatcha42@gmail.com',
     pass: 'funpasswordmatcha',
-  }
+  },
 });
 
 const mailOptions = {
@@ -17,7 +17,7 @@ export const sendMail = (who, sub, message) => {
     to: who,
     subject: sub,
     text: message,
-  }
+  };
   const options = Object.assign(mailOptions, info);
   transport.sendMail(options);
 };

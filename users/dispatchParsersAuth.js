@@ -1,9 +1,9 @@
-// import debug from 'debug';
+import debug from 'debug';
 import * as valid from './inputValidators';
 
-// const logger = debug('matcha:./users/parsers.js');
+const logger = debug('matcha:./users/parsers.js');
 
-const register = (data) => {
+export const register = (data) => {
   if (valid.postCheckEmptyAndKey(['login',
     'email',
     'password',
@@ -20,8 +20,20 @@ const register = (data) => {
   return false;
 };
 
-const login = () => {
-  // check.mail(data.email);
+export const login = (data) => {
+  if (valid.postCheckEmptyAndKey(['login',
+    'password',
+  ], data)) { return { err: 'Unauthorized post action' }; }
+  if (valid.password(data.password)) { return { err: 'Wrong format password' }; }
+  if (valid.login(data.login)) { return { err: 'Wrong format login' }; }
+  return false;
 };
 
-export { register, login };
+export const confirmUserMail = (data) => {
+  if (valid.postCheckEmptyAndKey(['login',
+    'token',
+  ], data)) { return { err: 'Unauthorized post action' }; }
+  if (valid.login(data.login)) { return { err: 'Wrong format login' }; }
+  if (valid.token(data.token)) { return { err: 'Wrong format token' }; }
+  return false;
+};

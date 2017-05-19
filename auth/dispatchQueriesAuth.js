@@ -70,12 +70,14 @@ export const resetPassword = (req, res, next) => {
     const token = resetToken(req.body.email);
     sendMail(req.body.email, 'Reset Password - Matcha', `Please Reset Your password following this link
     http://localhost:8080/api/auth/resetpassword?token=${token}`);
+    logger('Email was been send');
   })
   .catch((err) => { logger(err); });
   return next();
 };
 
 // update check response demain si pas trouver il renvoi quoi ce fdp
+// resetpassword en form c un password et un repeat password et le token
 export const resetPasswordForm = (req, res, next) => {
   const errorParser = parse.resetPasswordForm(req.query);
   if (errorParser) {
@@ -89,14 +91,16 @@ export const resetPasswordForm = (req, res, next) => {
     }
     logger('Authorized');
     req.decoded = decoded;
+    logger(decoded);
     req.dUsers
-    .findOne({ email: req.decoded.email })
+    .findOne({ email: req.decoded.data })
     .then((data) => { if (!data) throw Err('No Account Found - ResetPassword!'); })
     .then(() => {
+      // i dont know i have a get token but where can i send my form
       // req.dUsers
         // .update({ email: req.decoded.email }, { $set: })
     })
-    .catch((err) => { logger(err); });
+    .catch((er) => { logger(er); });
   });
   return next();
 };

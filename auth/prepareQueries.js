@@ -39,7 +39,8 @@ export const QueryConfirmUserMail = (req) => {
       { $set: { confirmed: true },
         $unset: { registerToken: '' },
       })
-      .catch(() => { logger('Something happens will trying to connect!'); });
+      .catch(() => { logger('Something happens will trying to connect!'); })
+      .then(() => { logger('Succesfully Confirmed'); });
   })
   .catch(() => { logger('Wrong Token - confirmUserMail'); });
 };

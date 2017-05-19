@@ -5,9 +5,9 @@ const router = Router();
 
 router
   .post('/register', handlers.register)
+  .put('/confirmuser', handlers.confirmUserMail)
   .post('/login', handlers.login)
-  .put('/resetpassword', handlers.resetPassword)
-  .get('/resetpassword', handlers.resetPasswordForm)
-  .post('/confirmuser', handlers.confirmUserMail);
+  .post('/resetpassword', handlers.resetPassword)
+  .get('/resetpassword', handlers.resetPasswordForm);
 
 export default router;

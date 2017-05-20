@@ -18,11 +18,8 @@ app
   .use(bodyParser.urlencoded({ extended: true }))
   .use('/api', mongo.Connect)
   .use('/api', mongo.Error)
-  .use('/api', checkAuthenticate);
-app
-  .use('/api/auth', auth);
-  
-app
+  .use('/api', checkAuthenticate)
+  .use('/api/auth', auth)
   .use('/api/users', users);
 
 // app

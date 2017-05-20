@@ -9,6 +9,10 @@ import * as prepare from './prepareQueries';
 
 const logger = debug('matcha:auth/dispatchingQueriesAuth.js:');
 
+export const checkAuthenticate = (req, res) => {
+  res.send({ status: 'success' });
+};
+
 export const register = (req, res, next) => {
   const errorParser = parse.register(req.body);
   if (errorParser) {
@@ -93,14 +97,14 @@ export const resetPasswordForm = (req, res, next) => {
     req.decoded = decoded;
     logger(decoded);
     req.dUsers
-    .findOne({ email: req.decoded.data })
-    .then((data) => { if (!data) throw Err('No Account Found - ResetPassword!'); })
-    .then(() => {
+      .findOne({ email: req.decoded.data })
+      .then((data) => { if (!data) throw Err('No Account Found - ResetPassword!'); })
+      .then(() => {
       // i dont know i have a get token but where can i send my form
       // req.dUsers
         // .update({ email: req.decoded.email }, { $set: })
-    })
-    .catch((er) => { logger(er); });
+      })
+      .catch((er) => { logger(er); });
   });
   return next();
 };

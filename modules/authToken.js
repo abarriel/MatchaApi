@@ -20,23 +20,25 @@ export const resetToken = (info) => {
 };
 
 export const checkAuthenticate = (req, res, next) => {
-  if (req.originalUrl.substr(0, 9) === '/api/auth') { next(); return; }
+  if (req.originalUrl.substr(0, 9) === '/api/auth' && req.originalUrl !== '/api/auth/check_authenticate') {
+    return next();
+  }
   // const token = req.body.token || req.query.token || req.headers['x-access-token'];
   const tokenBearer = req.headers.authorization;
   if (!tokenBearer || (tokenBearer.length < 7) || tokenBearer.substr(0, 7) !== 'Bearer ') {
-    res.send('Token Error');
+    res.send({ status: 'error', message: 'invalid token' });
     logger('Wrong Authorization Provided');
     return;
   }
   const token = tokenBearer.substr(7);
   if (!token) {
-    res.send('Token Error');
+    res.send({ status: 'error', message: 'invalid token' });
     logger('No token provide');
     return;
   }
   jwt.verify(token, secretSentence, (err, decoded) => {
     if (err) {
-      res.send('Token Error');
+      res.send({ status: 'error', message: 'invalid token' });
       logger('Failed to authenticate token');
       return;
     }

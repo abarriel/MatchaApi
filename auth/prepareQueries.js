@@ -23,8 +23,20 @@ export const QueryRegister = (req) => {
   logger('Succesfully Registered');
 };
 
-export const QueryLogin = (req, res) => {
-  logger(res);
+export const QueryLogin = (data, inputpassword) => {
+  //
+  // cryptPassword(inputpassword)
+  // .then((pass) => {
+  //   logger(pass);
+  //   return 'pass';
+  // //   // if (pass !== data.passwordhashed) {
+  // //   //   // Err('Wrong Password !');
+  // //   //   return ('Err');
+  // //   // } else {
+  // //   //   return ('');
+  // //   // }
+  // })
+  // .catch(() => { logger('catcherr') });
 };
 
 export const QueryConfirmUserMail = (req) => {

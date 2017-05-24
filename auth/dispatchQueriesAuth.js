@@ -14,51 +14,57 @@ export const checkAuthenticate = (req, res) => {
 };
 
 export const register = (req, res, next) => {
+  logger(req.body);
   const errorParser = parse.register(req.body);
   if (errorParser) {
-    logger(errorParser);
-    return next();
+    return (res.send({ status: 'failed', details: errorParser.err }));
   }
-  delete req.body.repassword;
   req.dUsers
   .findOne({ $or: [{ login: req.body.login }, { email: req.body.email }] })
   .then((data) => { if (data) throw Err('Already Registered'); })
   .then(() => prepare.QueryRegister(req))
-  .catch((err) => { logger(err); });
-  return next();
+  .then(() => res.send({ status: 'succes' }))
+  .catch((err) => { logger(err); return (res.send({ status: 'failed', details: err.error })); });
 };
 
 export const login = (req, res, next) => {
   const errorParser = parse.login(req.body);
   if (errorParser) {
-    logger(errorParser);
-    return next();
+    return (res.send({ status: 'failed', details: errorParser.err }));
   }
   req.dUsers
   .findOne({ login: req.body.login })
   .then((data) => {
     if (!data) throw Err('No Account Found - login!');
     if (!data.confirmed) throw Err('Account not confirmed - login');
-    return data;
+    return (data);
   })
-  .then((data) => { generateLoginToken(data); })
-  .catch((err) => { logger(err); return next(); });
-  return next();
+  .then((data) => {
+    // cryptPassword(req.body.password)
+    //   .then((pass) => logger(pass))
+    //   .catch(() => logger('dd'))
+  })
+  .then(() => res.send({ status: 'succes' }))
+  .catch(err => res.send({ status: 'failed', details: err.error }));
 };
 
 export const confirmUserMail = (req, res, next) => {
+  console.log(req.body);
   const errorParser = parse.confirmUserMail(req.body);
   if (errorParser) {
-    logger(errorParser);
-    return next();
+    res.send({ status: 'failed', details: errorParser.err });
+    next();
+    return;
   }
   req.dUsers
   .findOne({ login: req.body.login })
-  .then((data) => { if (!data) throw Err('No Account Found! - confirm'); return data; })
-  .then((data) => { if (data.confirmed) throw Err('Account Already Registered'); return data; })
+  .then((data) => {
+    if (!data) throw Err('No Account Found! - confirm');
+    if (data.confirmed) throw Err('Account Already Registered');
+  })
   .then(() => { prepare.QueryConfirmUserMail(req); })
-  .catch((err) => { logger(err); });
-  return next();
+  .then(() => { res.send({ status: 'success' }); next(); })
+  .catch((err) => { logger(err); res.send({ status: 'failed', details: err.error }); });
 };
 
 export const resetPassword = (req, res, next) => {

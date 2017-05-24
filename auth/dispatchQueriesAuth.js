@@ -1,6 +1,7 @@
 import debug from 'debug';
 import jwt from 'jsonwebtoken';
 import { Err } from '../modules/error';
+import { comparePassword } from '../modules/password';
 import { generateLoginToken } from './generateLoginToken';
 import { resetToken, secretSentence } from '../modules/authToken';
 import { sendMail } from '../modules/mail';
@@ -9,7 +10,8 @@ import * as prepare from './prepareQueries';
 
 const logger = debug('matcha:auth/dispatchingQueriesAuth.js:');
 
-export const checkAuthenticate = (req, res) => {
+export const checkAuthenticate = (req, res, next) => {
+  logger(req)
   res.send({ status: 'success' });
 };
 
@@ -40,11 +42,17 @@ export const login = (req, res, next) => {
     return (data);
   })
   .then((data) => {
-    // cryptPassword(req.body.password)
-    //   .then((pass) => logger(pass))
-    //   .catch(() => logger('dd'))
+    comparePassword(req.body.password, data.password)
+      .then((checkPass) => {
+        if (checkPass !== true) {
+          res.send({ status: 'failed', details: 'Wrong Password' })
+        } else {
+          const tokenAuthenticate = generateLoginToken(data);
+          res.send({ status: 'success', token: tokenAuthenticate })
+        }
+      })
+      .catch(() => res.send({ status: 'failed', details: 'err.error ' }));
   })
-  .then(() => res.send({ status: 'succes' }))
   .catch(err => res.send({ status: 'failed', details: err.error }));
 };
 

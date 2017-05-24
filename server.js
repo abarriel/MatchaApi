@@ -19,7 +19,9 @@ app
   .use('/api', mongo.Connect)
   .use('/api', mongo.Error)
   .use('/api', checkAuthenticate)
+
   .use('/api/auth', auth)
+  //
   .use('/api/users', users);
 
 // app

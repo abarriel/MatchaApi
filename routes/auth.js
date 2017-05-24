@@ -2,7 +2,6 @@ import { Router } from 'express';
 import * as handlers from '../auth/dispatchQueriesAuth';
 
 const router = Router();
-
 router
   .get('/check_authenticate', handlers.checkAuthenticate)
   .post('/register', handlers.register)

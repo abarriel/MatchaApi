@@ -8,7 +8,7 @@ export const generateLoginToken = (data) => {
     login: data.login,
     confirmed: data.confirmed,
   });
-  logger(token);
+  return (token);
 };
 
 

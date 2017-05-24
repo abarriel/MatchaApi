@@ -23,7 +23,7 @@ export const checkAuthenticate = (req, res, next) => {
   if (req.originalUrl.substr(0, 9) === '/api/auth' && req.originalUrl !== '/api/auth/check_authenticate') {
     return next();
   }
-  // const token = req.body.token || req.query.token || req.headers['x-access-token'];
+  logger(req.headers);
   const tokenBearer = req.headers.authorization;
   if (!tokenBearer || (tokenBearer.length < 7) || tokenBearer.substr(0, 7) !== 'Bearer ') {
     res.send({ status: 'error', message: 'invalid token' });

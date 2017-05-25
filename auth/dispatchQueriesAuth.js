@@ -11,11 +11,7 @@ import * as prepare from './prepareQueries';
 const logger = debug('matcha:auth/dispatchingQueriesAuth.js:');
 
 export const checkAuthenticate = (req, res) => {
-  // logger(req.decoded);
   if (req.decoded) res.send({ status: 'success' });
-  // else {
-  // res.send({ status: 'failed' });
-  // }
 };
 
 export const register = (req, res, next) => {

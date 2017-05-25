@@ -10,9 +10,12 @@ import * as prepare from './prepareQueries';
 
 const logger = debug('matcha:auth/dispatchingQueriesAuth.js:');
 
-export const checkAuthenticate = (req, res, next) => {
-  // logger(req)
-  res.send({ status: 'success' });
+export const checkAuthenticate = (req, res) => {
+  // logger(req.decoded);
+  if (req.decoded) res.send({ status: 'success' });
+  // else {
+  // res.send({ status: 'failed' });
+  // }
 };
 
 export const register = (req, res, next) => {
@@ -87,30 +90,27 @@ export const confirmUserMail = (req, res, next) => {
 };
 
 export const resetPassword = (req, res, next) => {
-  const errorParser = parse.resetPassword(req.body);
-  if (errorParser) {
-    logger(errorParser);
-    return next();
-  }
+  // const errorParser = parse.resetPassword(req.body);
+  // if (errorParser) {
+  //   res.send({ status: 'failed', details: errorParser.err });
+  // }
   req.dUsers
     .findOne({ email: req.body.email })
     .then((data) => {
       if (!data) throw Err('No Account Found - ResetPassword!');
-    })
-    .then(() => {
       const token = resetToken(req.body.email);
       sendMail(
         req.body.email,
         'Reset Password - Matcha',
         `Please Reset Your password following this link
-    http://localhost:8080/api/auth/resetpassword?token=${token}`,
+      http://localhost:3000/auth/resetpassword?token=${token}`,
       );
-      logger('Email was been send');
+      res.send({ status: 'success', detais: 'Email was been send' });
     })
     .catch((err) => {
-      logger(err);
+      res.send({ status: 'failed', details: err.error });
     });
-  return next();
+  // next();
 };
 
 // update check response demain si pas trouver il renvoi quoi ce fdp

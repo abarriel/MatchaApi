@@ -19,12 +19,10 @@ app
   .use('/api', mongo.Connect)
   .use('/api', mongo.Error)
   .use('/api', checkAuthenticate)
-
   .use('/api/auth', auth)
-  //
   .use('/api/users', users);
 
 // app
-  // .use('/api', mongo.Disconnect);
+// .use('/api', mongo.Disconnect);
 
 server.listen(8080, () => logger('SERVER STARTED'));

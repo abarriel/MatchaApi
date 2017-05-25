@@ -11,7 +11,7 @@ import * as prepare from './prepareQueries';
 const logger = debug('matcha:auth/dispatchingQueriesAuth.js:');
 
 export const checkAuthenticate = (req, res, next) => {
-  logger(req)
+  // logger(req)
   res.send({ status: 'success' });
 };
 
@@ -25,7 +25,7 @@ export const register = (req, res, next) => {
   .findOne({ $or: [{ login: req.body.login }, { email: req.body.email }] })
   .then((data) => { if (data) throw Err('Already Registered'); })
   .then(() => prepare.QueryRegister(req))
-  .then(() => res.send({ status: 'succes' }))
+  .then(() => res.send({ status: 'success' }))
   .catch((err) => { logger(err); return (res.send({ status: 'failed', details: err.error })); });
 };
 

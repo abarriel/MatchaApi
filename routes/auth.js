@@ -1,13 +1,14 @@
 import { Router } from 'express';
-import * as handlers from '../auth/dispatchQueriesAuth';
+import * as handlers from '../auth/HandlersQuery';
 
 const router = Router();
+
 router
   .get('/check_authenticate', handlers.checkAuthenticate)
-  .post('/register', handlers.register)
+  .put('/resetpassword', handlers.resetPassword)
   .put('/confirmuser', handlers.confirmUserMail)
+  .post('/register', handlers.register)
   .post('/login', handlers.login)
-  .post('/resetpassword', handlers.resetPassword)
-  .get('/resetpassword', handlers.resetPasswordForm);
+  .post('/forgetpassword', handlers.forgetPassword);
 
 export default router;

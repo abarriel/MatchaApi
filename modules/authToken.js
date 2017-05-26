@@ -21,7 +21,7 @@ export const resetToken = (info) => {
       data: info,
     },
     secretSentence,
-    { expiresIn: '2m' },
+    { expiresIn: '10m' },
   );
   return token;
 };
@@ -31,21 +31,20 @@ export const checkAuthenticate = (req, res, next) => {
     req.originalUrl.substr(0, 9) === '/api/auth' &&
     req.originalUrl !== '/api/auth/check_authenticate'
   ) {
-    return next();
-  }
-  const tokenBearer = req.headers.authorization;
-  if (!tokenBearer || tokenBearer.length < 15 || tokenBearer.substr(0, 7) !== 'Bearer ') {
-    logger('Wrong Authorization Provided');
-    res.send({ status: 'error', message: 'invalid token' });
-    return;
-  }
-  jwt.verify(tokenBearer.substr(7), secretSentence, (err, decoded) => {
-    if (err) {
-      logger('Failed to authenticate token');
-      res.send({ status: 'error', message: 'invalid token' });
-    }
-    req.decoded = decoded;
-    logger('Authorized');
     next();
-  });
+  } else {
+    const tokenBearer = req.headers.authorization;
+    if (!tokenBearer || tokenBearer.length < 15 || tokenBearer.substr(0, 7) !== 'Bearer ') {
+      res.send({ status: 'error', message: 'invalid token' });
+    } else {
+      jwt.verify(tokenBearer.substr(7), secretSentence, (err, decoded) => {
+        if (err) {
+          res.send({ status: 'error', message: 'invalid token' });
+        }
+        req.decoded = decoded;
+        logger('Authorized');
+        next();
+      });
+    }
+  }
 };

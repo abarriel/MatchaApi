@@ -1,55 +1,49 @@
-import debug from 'debug';
-import { Err } from '../modules/error';
 import { sendMail } from '../modules/mail';
-import { cryptPassword } from '../modules/password';
+import { cryptPassword, comparePassword } from '../modules/password';
+import { generateLoginToken } from './generateLoginToken';
 
-const logger = debug('matcha:prepareQueryRegister.js');
+export const Login = (password, data) =>
+  new Promise((resolve, reject) => {
+    comparePassword(password, data.password)
+      .then((checkPass) => {
+        if (checkPass !== true) {
+          reject({ details: 'Wrong Password' });
+        } else {
+          const tokenAuthenticate = generateLoginToken(data);
+          resolve(tokenAuthenticate);
+        }
+      })
+      .catch(() => reject({ details: 'Failed - Something happens' }));
+  });
 
-export const QueryRegister = (req) => {
-  const token = Math.random().toString(36).substr(2, 6).toUpperCase();
-  cryptPassword(req.body.password)
-    .then((pass) => {
-      req.body.password = pass;
-      req.dUsers.insert(Object.assign(req.body, { registerToken: token })).catch(() => {
-        logger('insert failed');
+export const Register = req =>
+  new Promise((resolve, reject) => {
+    const token = Math.random().toString(36).substr(2, 6).toUpperCase();
+    cryptPassword(req.body.password)
+      .then((pass) => {
+        req.body.password = pass;
+        req.dUsers
+          .insert(Object.assign(req.body, { registerToken: token }))
+          .then(() => {
+            sendMail(req.body.email, 'Registration - Matcha', `Registration Code: ${token}`);
+            resolve();
+          })
+          .catch(() => {
+            reject({ details: 'Insert failed' });
+          });
+      })
+      .catch(() => {
+        reject({ details: 'Failed - Something happens' });
       });
-    })
-    .then(() => {
-      sendMail(req.body.email, 'Registration - Matcha', `Registration Code: ${token}`);
-    })
-    .catch(() => {
-      logger('password error');
-    });
-  logger('Succesfully Registered');
-};
+  });
 
-export const QueryLogin = (data, inputpassword) => {
-  //
-  // cryptPassword(inputpassword)
-  // .then((pass) => {
-  //   logger(pass);
-  //   return 'pass';
-  // //   // if (pass !== data.passwordhashed) {
-  // //   //   // Err('Wrong Password !');
-  // //   //   return ('Err');
-  // //   // } else {
-  // //   //   return ('');
-  // //   // }
-  // })
-  // .catch(() => { logger('catcherr') });
-};
-
-export const QueryConfirmUserMail = req =>
+export const ConfirmUserMail = req =>
   new Promise((resolve, reject) => {
     req.dUsers
       .findOne({ login: req.body.login })
       .then((data) => {
-        if (!data) reject(Err('No Account Found! - confirmUserMail'));
-        else return data;
-      })
-      .then((data) => {
-        if (data.registerToken !== req.body.token) reject(Err('Wrong Token - confirmUserMail'));
-        return data;
+        if (!data) reject({ details: 'No Account Found' });
+        if (data.registerToken !== req.body.token) reject({ details: 'Wrong Code' });
       })
       .then(() =>
         req.dUsers.update(
@@ -60,11 +54,6 @@ export const QueryConfirmUserMail = req =>
           },
         ),
       )
-      .catch(() => {
-        reject('Something happens will trying to connect!');
-      })
-      .then(() => {
-        logger('Succesfully Confirmed');
-        resolve();
-      });
+      .catch(() => reject({ details: 'Something happens will trying to connect!' }))
+      .then(() => resolve({ details: 'Succesfully Confirmed' }));
   });

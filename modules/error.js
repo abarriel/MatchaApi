@@ -1,6 +1,6 @@
 export class Errr {
   constructor(msg) {
-    const error = { error: msg };
+    const error = { details: msg };
     return error;
   }
 }

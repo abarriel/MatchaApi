@@ -5,7 +5,9 @@ const logger = debug('matcha:mongo.js');
 
 export const Connect = (req, res, next) => {
   MongoClient.connect('mongodb://localhost/matcha', (err, db) => {
-    if (err) next(err);
+    if (err) {
+      return next(err);
+    }
     logger('Mongo:Connect');
     req.db = db;
     req.dUsers = db.collection('dUsers');

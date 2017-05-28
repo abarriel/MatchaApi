@@ -54,12 +54,13 @@ export const confirmUserMail = (req, res) => {
     req.dUsers
       .findOne({ login: req.body.login })
       .then((data) => {
+        logger(data);
         if (!data) throw Err('No Account Found! - confirm');
         if (data.confirmed) throw Err('Account Already Registered');
-        return prepare.confirmUserMail(req);
+        return prepare.ConfirmUserMail(req);
       })
       .then(() => res.send({ status: 'success' }))
-      .catch(err => res.send({ status: 'failed', details: err.details }));
+      .catch(() => res.send({ status: 'failed', details: 'err.details' }));
   }
 };
 

@@ -1,7 +1,9 @@
 import * as valid from './Validators';
 
 export const register = (data) => {
-  if (valid.postCheckEmptyAndKey(['login', 'email', 'password', 'firstname', 'lastname'], data)) {
+  if (
+    valid.postCheckEmptyAndKey(['login', 'email', 'password', 'firstname', 'lastname', 'ip'], data)
+  ) {
     return { err: 'Unauthorized post action' };
   }
   if (valid.mail(data.email)) {

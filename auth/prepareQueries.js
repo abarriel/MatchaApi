@@ -1,6 +1,8 @@
 import { sendMail } from '../modules/mail';
 import { cryptPassword, comparePassword } from '../modules/password';
 import { generateLoginToken } from './generateLoginToken';
+import getAddress from './getAddress';
+import _ from 'lodash';
 
 export const Login = (password, data) =>
   new Promise((resolve, reject) => {
@@ -22,8 +24,12 @@ export const Register = req =>
     cryptPassword(req.body.password)
       .then((pass) => {
         req.body.password = pass;
+      })
+      .then(() => getAddress(req))
+      .then((data) => {
+        const info = _.assign({}, req.body, data, { registerToken: token });
         req.dUsers
-          .insert(Object.assign(req.body, { registerToken: token }))
+          .insert(info)
           .then(() => {
             sendMail(req.body.email, 'Registration - Matcha', `Registration Code: ${token}`);
             resolve();
